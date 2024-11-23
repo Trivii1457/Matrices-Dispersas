@@ -1,3 +1,4 @@
+
 class Lector:
     def leer_archivo(self, nombre_archivo):
         try:
