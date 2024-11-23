@@ -8,3 +8,4 @@ class Lector:
         except FileNotFoundError:
             print(f"El archivo {nombre_archivo} no se encontró.")
             return None
+    
