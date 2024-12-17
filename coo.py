@@ -22,7 +22,7 @@ def Representacion_coo(archivo):
         return None
 
 if __name__ == "__main__":
-    archivo = "Matriz1(15x15).txt"
+    archivo = "Matriz4(5x5).txt"
     matriz_coo = Representacion_coo(archivo)
     if matriz_coo:
         print("formato COO:")
