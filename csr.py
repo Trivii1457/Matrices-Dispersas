@@ -1,4 +1,4 @@
-def Representacion_coo(archivo):
+def Representacion_csr(archivo):
     vals = []
     p_fil = []
     cols = []
@@ -23,19 +23,104 @@ def Representacion_coo(archivo):
                         cont += 1        
             p_fil.append(cont)
                         
-        return {"valores": vals, "filas": p_fil, "columnas": cols}
+        return {"valores": vals, "columnas": cols,"filas": p_fil}
     except FileNotFoundError:
         print(f"Error: pailasn bro no se encontro, deja la carrera ya")
         return None
+    
+def Apartir_csr(repre):
+    max_fil = len(repre["filas"])-1
+    max_col = max(repre["columnas"]) + 1
+    matr = [[0 for _ in range(max_col)] for _ in range(max_fil)]
+    for i in range(max_fil):
+        ini = repre["filas"][i]
+        fin = repre["filas"][i +1]
+        for j in range(ini, fin):
+            col = repre["columnas"][j]
+            matr[i][col] = repre["valores"][j]
+    return matr
+
+def Obte(repre, i, j):
+    ini = repre["filas"][i]
+    f = repre["filas"][i+1]
+    for tj in range(ini, f):
+        print(tj)
+        if repre["columnas"][tj] == j:
+            return repre["valores"][tj]
+    return 0
+
+def Obtfila(repre, i):
+    max_col = max(repre["columnas"]) + 1
+    fil = [0] * max_col
+    ini = repre["filas"][i]
+    f = repre["filas"][i+1]
+    for k in range(ini, f):
+        col = repre["columnas"][k] 
+        fil[col] = repre["valores"][k] 
+    return fil
+
+def ObtCol(repre, j):
+    max_fila = len(repre["filas"]) - 1
+    col = [0] * max_fila 
+    
+    for fila in range(max_fila):
+        inicio = repre["filas"][fila]
+        fin = repre["filas"][fila + 1]
+        
+        for k in range(inicio, fin):
+            if repre["columnas"][k] == j:
+                col[fila] = repre["valores"][k]
+                break
+    return col
+
+def Modele(repre, i, j, x):
+    encontrado = False
+    for idx in range(repre["filas"][i], repre["filas"][i + 1]):
+        if repre["columnas"][idx] == j:
+            encontrado = True
+            if x == 0: 
+                del repre["valores"][idx]
+                del repre["columnas"][idx]
+                for k in range(i + 1, len(repre["filas"])):
+                    repre["filas"][k] -= 1  
+            else: 
+                repre["valores"][idx] = x
+            break
+    if not encontrado and x != 0:
+        repre["valores"].append(x)
+        repre["columnas"].append(j)
+        for k in range(i + 1, len(repre["filas"])):
+            repre["filas"][k] += 1  
+        repre["filas"].append(repre["filas"][-1])  
+
+
 
 if __name__ == "__main__":
-    archivo = "Matriz4(5x5).txt"
-    matriz_coo = Representacion_coo(archivo)
-    if matriz_coo:
+    archivo = "Matriz2(15x15).txt"
+    matriz_csr = Representacion_csr(archivo)
+    if matriz_csr:
         print("formato crs:")
-        print("Valores:", matriz_coo["valores"])
-        print("Columnas:", matriz_coo["columnas"])
-        print("Filas:", matriz_coo["filas"])
+        print("valores:", matriz_csr["valores"])
+        print("columnas:", matriz_csr["columnas"])
+        print("p-filas:", matriz_csr["filas"])
+
+        matriz_densa = Apartir_csr(matriz_csr)
+        print("Matriz creada desde csr:")
+        for fila in matriz_densa:
+            print(fila)
+        
+        elemento = Obte(matriz_csr, 1, 1) 
+        print(f"Elemento: {elemento}")
+
+        fila = Obtfila(matriz_csr, 1)
+        print(f"Fila 1: {fila}")
+        
+        columna = ObtCol(matriz_csr, 2)
+        print(f"Columna 2: {columna}")
+
+        Modele(matriz_csr, 0, 0, 0)
+        print("Matriz modificada:")
+        print(matriz_csr)
 
 #si lee esto profe, estoy cansado jefe ahora mas
 #P.D despues de esto creo que soy un 25.99999% menos feliz que antes
