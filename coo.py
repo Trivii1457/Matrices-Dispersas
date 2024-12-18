@@ -67,6 +67,35 @@ def Modele(repre, i, j, x):
         repre["filas"].append(i)
         repre["columnas"].append(j)
 
+def SumarMatricesCOO(matriz1, matriz2):
+    resultado = {
+        "valores": [],
+        "filas": [],
+        "columnas": []
+    }
+
+    # Agregar todos los elementos de la primera matriz al resultado
+    for val, fila, col in zip(matriz1["valores"], matriz1["filas"], matriz1["columnas"]):
+        resultado["valores"].append(val)
+        resultado["filas"].append(fila)
+        resultado["columnas"].append(col)
+
+    # Agregar los elementos de la segunda matriz al resultado
+    for val, fila, col in zip(matriz2["valores"], matriz2["filas"], matriz2["columnas"]):
+        encontrado = False
+        for idx, (res_fila, res_col) in enumerate(zip(resultado["filas"], resultado["columnas"])):
+            if res_fila == fila and res_col == col:
+                resultado["valores"][idx] += val
+                encontrado = True
+                break
+        if not encontrado:
+            resultado["valores"].append(val)
+            resultado["filas"].append(fila)
+            resultado["columnas"].append(col)
+
+    return resultado
+
+
 if __name__ == "__main__":
     archivo = "Matriz2(15x15).txt"
     matriz_coo = Representacion_coo(archivo)
@@ -94,4 +123,20 @@ if __name__ == "__main__":
         Modele(matriz_coo, 0, 0, 2)
         print("Matriz modificada:")
         print(matriz_coo)
-#si lee esto profe, estoy cansado jefe
+        print("--------------------*"*5)
+        #si lee esto profe, estoy cansado jefe 
+        #*****************************************************************************************
+        #Sumar matrices
+        matriz1 = Representacion_coo("Matriz1(15x15).txt")
+        matriz2 = Representacion_coo("Matriz2(15x15).txt")
+        if matriz1 and matriz2:
+            resultado = SumarMatricesCOO(matriz1, matriz2)
+            print("Matriz sumada en formato COO:")
+            print("Valores:", resultado["valores"])
+            print("Filas:", resultado["filas"])
+            print("Columnas:", resultado["columnas"])
+
+#[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
+#     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
+# ((5, 7), 2),    ((6, 1), 4),    ((6, 13), 8),    ((8, 10), 4),    ((8, 11), 9), 
+#    ((10, 5), 9),    ((10, 10), 6),    ((12, 12), 1),    ((13, 9), 2),    ((14, 2), 3)]

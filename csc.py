@@ -94,6 +94,37 @@ def Modele(repre, i, j, x):
             repre["p_col"][k] += 1  
         repre["p_col"].append(repre["p_col"][-1])  
   
+def SumarMatricesCSC(matriz1, matriz2):
+    resultado = {
+        "val": [],
+        "fil": [],
+        "p_col": [0]
+    }
+
+    num_cols = max(len(matriz1["p_col"]), len(matriz2["p_col"])) - 1
+    cont = 0
+
+    for j in range(num_cols):
+        col1_start = matriz1["p_col"][j] if j < len(matriz1["p_col"]) - 1 else 0
+        col1_end = matriz1["p_col"][j + 1] if j + 1 < len(matriz1["p_col"]) else 0
+        col2_start = matriz2["p_col"][j] if j < len(matriz2["p_col"]) - 1 else 0
+        col2_end = matriz2["p_col"][j + 1] if j + 1 < len(matriz2["p_col"]) else 0
+
+        col1_vals = {matriz1["fil"][i]: matriz1["val"][i] for i in range(col1_start, col1_end)}
+        col2_vals = {matriz2["fil"][i]: matriz2["val"][i] for i in range(col2_start, col2_end)}
+
+        all_rows = set(col1_vals.keys()).union(set(col2_vals.keys()))
+
+        for row in sorted(all_rows):
+            val = col1_vals.get(row, 0) + col2_vals.get(row, 0)
+            if val != 0:
+                resultado["val"].append(val)
+                resultado["fil"].append(row)
+                cont += 1
+
+        resultado["p_col"].append(cont)
+
+    return resultado
 
 
 
@@ -123,5 +154,21 @@ if __name__ == "__main__":
         Modele(matriz_csc, 0, 0, 0)
         print("Matriz modificada:")
         print(matriz_csc)
-        
+        print("-------------------------"*5)
 #Lo mas divertido de hacer esto es.....
+    #Sumar matrices en formato CSC
+    archivo1 = "Matriz1(15x15).txt"
+    archivo2 = "Matriz2(15x15).txt"
+    matriz_csc1 = Representacion_csc(archivo1)
+    matriz_csc2 = Representacion_csc(archivo2)
+    if matriz_csc1 and matriz_csc2:
+        matriz_sumada = SumarMatricesCSC(matriz_csc1, matriz_csc2)
+        print("Matriz sumada en formato CSC:")
+        print("Valores:", matriz_sumada["val"])
+        print("Filas:", matriz_sumada["fil"])
+        print("Punteros de columna:", matriz_sumada["p_col"])
+
+#[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
+#     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
+# ((5, 7), 2),    ((6, 1), 4),    ((6, 13), 8),    ((8, 10), 4),    ((8, 11), 9), 
+#    ((10, 5), 9),    ((10, 10), 6),    ((12, 12), 1),    ((13, 9), 2),    ((14, 2), 3)]

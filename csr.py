@@ -93,7 +93,37 @@ def Modele(repre, i, j, x):
             repre["filas"][k] += 1  
         repre["filas"].append(repre["filas"][-1])  
 
+def SumarMatricesCSR(matriz1, matriz2):
+    resultado = {
+        "valores": [],
+        "columnas": [],
+        "filas": [0]
+    }
 
+    num_filas = max(len(matriz1["filas"]), len(matriz2["filas"])) - 1
+    cont = 0
+
+    for i in range(num_filas):
+        fila1_start = matriz1["filas"][i] if i < len(matriz1["filas"]) - 1 else 0
+        fila1_end = matriz1["filas"][i + 1] if i + 1 < len(matriz1["filas"]) else 0
+        fila2_start = matriz2["filas"][i] if i < len(matriz2["filas"]) - 1 else 0
+        fila2_end = matriz2["filas"][i + 1] if i + 1 < len(matriz2["filas"]) else 0
+
+        fila1_vals = {matriz1["columnas"][j]: matriz1["valores"][j] for j in range(fila1_start, fila1_end)}
+        fila2_vals = {matriz2["columnas"][j]: matriz2["valores"][j] for j in range(fila2_start, fila2_end)}
+
+        all_cols = set(fila1_vals.keys()).union(set(fila2_vals.keys()))
+
+        for col in sorted(all_cols):
+            val = fila1_vals.get(col, 0) + fila2_vals.get(col, 0)
+            if val != 0:
+                resultado["valores"].append(val)
+                resultado["columnas"].append(col)
+                cont += 1
+
+        resultado["filas"].append(cont)
+
+    return resultado
 
 if __name__ == "__main__":
     archivo = "Matriz2(15x15).txt"
@@ -125,3 +155,20 @@ if __name__ == "__main__":
 #si lee esto profe, estoy cansado jefe ahora mas
 #P.D despues de esto creo que soy un 25.99999% menos feliz que antes
 #y un 19.99% mejor programador
+
+    archivo1 = "Matriz1(15x15).txt"
+    archivo2 = "Matriz2(15x15).txt"
+    matriz_csr1 = Representacion_csr(archivo1)
+    matriz_csr2 = Representacion_csr(archivo2)
+
+    if matriz_csr1 and matriz_csr2:
+        matriz_sumada = SumarMatricesCSR(matriz_csr1, matriz_csr2)
+        print("Matriz sumada en formato CSR:")
+        print("Valores:", matriz_sumada["valores"])
+        print("Columnas:", matriz_sumada["columnas"])
+        print("Punteros de fila:", matriz_sumada["filas"])
+
+#[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
+#     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
+# ((5, 7), 2),    ((6, 1), 4),    ((6, 13), 8),    ((8, 10), 4),    ((8, 11), 9), 
+#    ((10, 5), 9),    ((10, 10), 6),    ((12, 12), 1),    ((13, 9), 2),    ((14, 2), 3)]
