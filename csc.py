@@ -205,9 +205,9 @@ if __name__ == "__main__":
 
     matriz_transpuesta = TransponerCSC(matriz_sumada)
     print("Matriz transpuesta en formato CSR:")
-    print("Valores:", matriz_transpuesta["valores"])
-    print("Columnas:", matriz_transpuesta["columnas"])
-    print("Punteros de fila:", matriz_transpuesta["filas"])
+    print("Valores:", matriz_transpuesta["val"])
+    print("Filas:", matriz_transpuesta["fil"])
+    print("Punteros de columna:", matriz_transpuesta["p_col"])
 
 #[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
 #     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
