@@ -203,7 +203,7 @@ if __name__ == "__main__":
         print("Filas:", matriz_sumada["fil"])
         print("Punteros de columna:", matriz_sumada["p_col"])
 
-    matriz_transpuesta = TransponerCSR(matriz_sumada)
+    matriz_transpuesta = TransponerCSC(matriz_sumada)
     print("Matriz transpuesta en formato CSR:")
     print("Valores:", matriz_transpuesta["valores"])
     print("Columnas:", matriz_transpuesta["columnas"])
