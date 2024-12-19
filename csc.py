@@ -127,6 +127,41 @@ def SumarMatricesCSC(matriz1, matriz2):
     return resultado
 
 
+def TransponerCSC(matriz_csc):
+    num_cols = len(matriz_csc["p_col"]) - 1
+    num_filas = max(matriz_csc["fil"]) + 1 if matriz_csc["fil"] else 0
+
+    transpuesta = {
+        "val": [],
+        "fil": [],
+        "p_col": [0] * (num_filas + 1)
+    }
+
+    # Contar el número de elementos en cada fila de la matriz original
+    for fila in matriz_csc["fil"]:
+        transpuesta["p_col"][fila + 1] += 1
+
+    # Convertir los conteos acumulados en punteros de columna
+    for i in range(1, len(transpuesta["p_col"])):
+        transpuesta["p_col"][i] += transpuesta["p_col"][i - 1]
+
+    # Crear una lista temporal para almacenar los índices de inserción
+    inserciones = transpuesta["p_col"][:]
+
+    # Llenar los valores y las filas de la matriz transpuesta
+    for col in range(num_cols):
+        start = matriz_csc["p_col"][col]
+        end = matriz_csc["p_col"][col + 1]
+        for i in range(start, end):
+            fila = matriz_csc["fil"][i]
+            val = matriz_csc["val"][i]
+            idx = inserciones[fila]
+            transpuesta["val"].insert(idx, val)
+            transpuesta["fil"].insert(idx, col)
+            inserciones[fila] += 1
+
+    return transpuesta
+
 
 if __name__ == "__main__":
     archivo = "Matriz4(5x5).txt"
@@ -167,6 +202,12 @@ if __name__ == "__main__":
         print("Valores:", matriz_sumada["val"])
         print("Filas:", matriz_sumada["fil"])
         print("Punteros de columna:", matriz_sumada["p_col"])
+
+    matriz_transpuesta = TransponerCSR(matriz_sumada)
+    print("Matriz transpuesta en formato CSR:")
+    print("Valores:", matriz_transpuesta["valores"])
+    print("Columnas:", matriz_transpuesta["columnas"])
+    print("Punteros de fila:", matriz_transpuesta["filas"])
 
 #[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
 #     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    

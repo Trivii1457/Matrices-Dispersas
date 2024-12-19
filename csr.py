@@ -125,6 +125,42 @@ def SumarMatricesCSR(matriz1, matriz2):
 
     return resultado
 
+def TransponerCSR(matriz_csr):
+    num_filas = len(matriz_csr["filas"]) - 1
+    num_columnas = max(matriz_csr["columnas"]) + 1 if matriz_csr["columnas"] else 0
+
+    transpuesta = {
+        "valores": [],
+        "columnas": [],
+        "filas": [0] * (num_columnas + 1)
+    }
+
+    # Contar el número de elementos en cada columna de la matriz original
+    for col in matriz_csr["columnas"]:
+        transpuesta["filas"][col + 1] += 1
+
+    # Convertir los conteos acumulados en punteros de fila
+    for i in range(1, len(transpuesta["filas"])):
+        transpuesta["filas"][i] += transpuesta["filas"][i - 1]
+
+    # Crear una lista temporal para almacenar los índices de inserción
+    inserciones = transpuesta["filas"][:]
+
+    # Llenar los valores y las columnas de la matriz transpuesta
+    for fila in range(num_filas):
+        start = matriz_csr["filas"][fila]
+        end = matriz_csr["filas"][fila + 1]
+        for i in range(start, end):
+            col = matriz_csr["columnas"][i]
+            val = matriz_csr["valores"][i]
+            idx = inserciones[col]
+            transpuesta["valores"].insert(idx, val)
+            transpuesta["columnas"].insert(idx, fila)
+            inserciones[col] += 1
+
+    return transpuesta
+#Yo pensaba que no tenia que pensar tanto, si mañana no estoy es porque me  mimi  por siempre
+
 if __name__ == "__main__":
     archivo = "Matriz2(15x15).txt"
     matriz_csr = Representacion_csr(archivo)
@@ -168,6 +204,11 @@ if __name__ == "__main__":
         print("Columnas:", matriz_sumada["columnas"])
         print("Punteros de fila:", matriz_sumada["filas"])
 
+    matriz_transpuesta = TransponerCSR(matriz_sumada)
+    print("Matriz transpuesta en formato CSR:")
+    print("Valores:", matriz_transpuesta["valores"])
+    print("Columnas:", matriz_transpuesta["columnas"])
+    print("Punteros de fila:", matriz_transpuesta["filas"])
 #[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
 #     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
 # ((5, 7), 2),    ((6, 1), 4),    ((6, 13), 8),    ((8, 10), 4),    ((8, 11), 9), 

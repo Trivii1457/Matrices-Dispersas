@@ -95,6 +95,14 @@ def SumarMatricesCOO(matriz1, matriz2):
 
     return resultado
 
+def TransponerCOO(matriz_coo):
+    transpuesta = {
+        "valores": matriz_coo["valores"],
+        "filas": matriz_coo["columnas"],
+        "columnas": matriz_coo["filas"]
+    }
+    return transpuesta
+
 
 if __name__ == "__main__":
     archivo = "Matriz2(15x15).txt"
@@ -135,6 +143,12 @@ if __name__ == "__main__":
             print("Valores:", resultado["valores"])
             print("Filas:", resultado["filas"])
             print("Columnas:", resultado["columnas"])
+
+        matriz_transpuesta = TransponerCOO(resultado)
+        print("Matriz transpuesta en formato COO:")
+        print("Valores:", matriz_transpuesta["valores"])
+        print("Filas:", matriz_transpuesta["filas"])
+        print("Columnas:", matriz_transpuesta["columnas"])
 
 #[    ((0, 6), 3),    ((0, 9), 5),    ((1, 12), 8),
 #     ((2, 14), 7),    ((3, 4), 7),    ((4, 8), 8),    ((4, 14), 6),    
