@@ -10,6 +10,8 @@ class Main:
             print(contenido)
         else:
             print("No se pudo leer el archivo.")
-
-if __name__ == '__main__':
-    main = Main()
+def repre(nombre):
+    return repre
+def sumar(Repre1,Repre2):
+    if __name__ == '__main__':
+     main = Main()

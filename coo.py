@@ -68,7 +68,7 @@ def Modele(repre, i, j, x):
         repre["columnas"].append(j)
 
 if __name__ == "__main__":
-    archivo = "Matriz2(15x15).txt"
+    archivo = "Matriz5(6x6).txt"
     matriz_coo = Representacion_coo(archivo)
     if matriz_coo:
         #Representacion

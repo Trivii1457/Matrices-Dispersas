@@ -25,12 +25,11 @@ def guar_matr_en_arch(matriz, archivo):
 
 
 if __name__ == "__main__":
-    M = 5
-    N = 5
-    dens = 0.1
+    M = 6
+    N = 6
+    dens = 0.2
 
     matriz = gen_mat_dis(M, N, dens)
-    
-    archivo = "matriz4(5x5).txt"
+    archivo = "matriz7(6x6).txt"
     guar_matr_en_arch(matriz, archivo)
 

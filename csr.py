@@ -11,9 +11,8 @@ def Representacion_csr(archivo):
                 #Verifica que no este vacia la linea, me mate horas pensando y buscando
                 linea_compl = linea.lstrip()
                 if not linea_compl or not linea_compl[0].isdigit():
-                    #cuando algo esta vacio es mejor dejarlo atras y seguir :/
                     continue 
-        
+                
                 fila = map(int, linea.split())
                 p_fil.append(cont)
                 for j, val in enumerate(fila):
@@ -96,7 +95,7 @@ def Modele(repre, i, j, x):
 
 
 if __name__ == "__main__":
-    archivo = "Matriz2(15x15).txt"
+    archivo = "Matriz6(6x6).txt"
     matriz_csr = Representacion_csr(archivo)
     if matriz_csr:
         print("formato crs:")

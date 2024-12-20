@@ -98,7 +98,7 @@ def Modele(repre, i, j, x):
 
 
 if __name__ == "__main__":
-    archivo = "Matriz4(5x5).txt"
+    archivo = "Matriz7(6x6).txt"
     matriz_csc = Representacion_csc(archivo)
     if matriz_csc:
         print("formato csc:")
